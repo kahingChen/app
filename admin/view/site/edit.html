@@ -1,0 +1,93 @@
+{include file="common@header" /}
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+          <div class="layui-form-item">
+              <label for="username" class="layui-form-label">
+                  站点名称
+              </label>
+              <div class="layui-input-inline">
+                
+                  <input type="text" id="site_name" name="site_name" required="" lay-verify="required"
+                  autocomplete="off" value="{$site.site_name}" class="layui-input" autofocus="">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  <span class="x-red"></span>建议不超过30个字符
+              </div>
+          </div>
+          
+          <div class="layui-form-item">
+              <label for="L_email" class="layui-form-label">
+                  关键字
+              </label>
+              <div class="layui-input-inline">
+
+                <textarea  name="keywords" required lay-verify="required" id="keywords" class="layui-textarea" >{$site.keywords}</textarea>
+
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  <span class="x-red"></span>建议不超过50个字符
+              </div>
+          </div>
+          
+          <div class="layui-form-item">
+              <label for="L_pass" class="layui-form-label">
+                 网站描述
+              </label>
+              <div class="layui-input-inline">
+
+                <textarea  name="desc" required lay-verify="required" id="desc" class="layui-textarea" >{$site.desc}</textarea>
+
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  建议不超过100个字符
+              </div>
+          </div>
+         
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  保存
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer;
+        
+          
+
+          //监听提交
+          form.on('submit(add)', function(data){
+            console.log(data);
+            //发异步，把数据提交给php
+            //以post方式提交到服务器
+            $.post("{:url('doEdit')}",{
+              'site_name': $('#site_name').val(),
+              'keywords': $('#keywords').val(),
+              'desc' : $('#desc').val()
+            })
+
+
+
+            layer.alert("保存成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+            });
+            return false;
+          });
+          
+          
+        });
+    </script>
+    
+  </body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="keywords" content="{$keywords}">
+	<meta name="descoription" content="{$desc}">
+	{//$site_name是在公共控制器Base的初始化操作中创建,可以在所有页面中直接使用}
+	<title>{$title|default="$title"}_{$site_name}</title>
+	<link rel="stylesheet" type="text/css" href="__INDEX__/bootstrap/css/bootstrap.css">
+</head>
+<body>
+<!-- 顶部导航 -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-12" >
+			<!-- 顶部导航 -->
+			<nav class="navbar navbar-default navbar-inverse">
+			  <div class="container-fluid">
+			    <div class="navbar-header">
+			      <a class="navbar-brand" href="/">企业官网</a>
+			    </div>
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+			      	<li
+			      	{//默认是首页高亮显示}
+			      		{//判断当前的url地址中是否存在cate_id参数,如果没有则将首页设置为高亮}
+						{if (null == $Think.get.cate_id)}
+						class="active"
+						{/if}
+
+			      	><a href="/">首页</a></li>
+			      	{volist name=":model('category')->order('cate_order','asc')->select()" id="cate"}
+			        <li
+					
+					{//设置当前分类高亮显示}
+					{//当前分类与URL中的正在显示的分类id一样的话,就把对应的分类设置为高亮}
+					{eq name="cate.cate_id" value="$Think.get.cate_id"}
+					   class="active"
+					{/eq}
+					
+					{//注意URL中的get参数的传递方式}
+			        ><a href="{:url('article/dispatch')}?cate_id={$cate.cate_id}">{$cate.cate_name}</a></li>
+			        {/volist}
+			      </ul>	      			      
+			    </div>
+			  </div>
+			</nav>
+		</div>
+	</div>
+</div>

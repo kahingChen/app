@@ -1,0 +1,68 @@
+{include file="common@header" /}
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">系统设置</a>
+        <a>
+          <cite>网站配置</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      
+      <table class="layui-table">
+        <thead>
+          <tr>
+            
+            <th width="5%">ID</th>
+            <th width="10%">站点名称</th>
+            <th width="20%">关键字</th>
+            <th width="50%">站点描述</th>
+            <th width="40%">最后更新时间</th>
+            <th width="10%">操作</th>
+        </thead>
+        <tbody>
+          <tr>
+           
+            <td>{$site.site_id}</td>
+            <td>{$site.site_name}</td>
+            <td>{$site.keywords}</td>
+            <td>{$site.desc}</td>
+            <td>{$site.update_time}</td>
+
+            <td class="td-manage">
+              
+              <a title="编辑"  onclick="x_admin_show('编辑','{:url(\"edit\")}')" href="javascript:;">
+                <i class="layui-icon">&#xe642;</i>
+              </a>
+             
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+
+    </div>
+    <script>
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+      
+    </script>
+ 
+  </body>
+
+</html>

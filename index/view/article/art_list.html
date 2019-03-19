@@ -1,0 +1,54 @@
+{include file="public/header" /}
+
+<div class="container" style="margin-top: 20px;">
+	<div class="row">
+		<div class="col-md-12">
+			<img src="/upload/banner/4.jpg" style="margin: -25px 0 15px 0">
+		</div>
+	</div>
+	<div class="row" style="margin-bottom: 15px;">
+	<div class="col-md-8">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+			  <h3 class="panel-title">{$title|default="详情"}</h3>
+			</div>
+		  	<div class="panel-body" style="margin-bottom: -20px;">
+			    <div class="list-group">
+
+			      {volist name="artList" id="art"}
+					
+				  <a href="{:url('article/dispatch')}?cate_id={$Think.get.cate_id}&art_id={$art.art_id}"
+
+				  class="list-group-item" style="border:none;">
+
+				  		{//文档标题仅截取前面的25个中文字符}
+				  		{:mb_substr($art.art_title,0,25,'utf8')}  {//文档的标题}
+				  		
+				  		{//文档发布时间的格式使用模板预置函数处理}
+					<span style="float: right">{$art.create_time|date='Y-m-d'}</span>
+					</a>
+				  {/volist}
+				</div>
+  			</div>
+		</div>
+		
+			{//显示分页条: raw是显示原始html代码,否则会显示为html实体}
+			<div class="text-center">{$page|raw}</div>
+			
+	</div>
+
+	<div class="col-md-4">
+			<img class="img-responsive" src="/upload/banner/7.jpg" >
+		</div>
+
+		
+	</div>
+</div>
+
+
+
+
+
+{include file="public/footer" /}
+
+	

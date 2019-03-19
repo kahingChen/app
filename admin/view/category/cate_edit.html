@@ -1,0 +1,110 @@
+
+{include file="common@header" /}
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+
+          {//获取分类名称}
+          <div class="layui-form-item">
+              <label for="cateName" class="layui-form-label">
+                  分类名称
+              </label>
+              <div class="layui-input-inline">
+                
+                  <input type="text" id="cate_name" name="cate_name"  
+                  autocomplete="off" value="{$cate.cate_name}" class="layui-input">
+              </div>
+          </div>
+
+          {//获取分类排序}
+          <div class="layui-form-item">
+              <label for="cate_order" class="layui-form-label">
+                  分类排序
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="cate_order" name="cate_order"  
+                  autocomplete="off" value="{$cate.cate_order}" class="layui-input">
+              </div>
+          </div>
+
+          {//编辑分类类型:0单页,1列表}
+          <div class="layui-form-item">
+              <label for="cate_type" class="layui-form-label">
+                  分类类型
+              </label>
+              <div class="layui-input-inline">
+                  <select name="cate_type" lay-verify="" id="cate_type">
+                    <option value="1" selected="">列表页</option>
+                    <option value="0">单页面</option>
+                  </select> 
+              </div>
+          </div>
+
+                   
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  保存
+              </button>
+          </div>
+      </form>
+    </div>
+
+
+    <script>
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer;
+        
+          
+
+          //监听提交
+          form.on('submit(add)', function(data){
+            console.log(data);
+            //发异步，把数据提交给php
+            //以post方式提交到服务器
+            $.post("{:url('doEdit')}",{
+              'cate_name': $('#cate_name').val(),   //分类名称
+              'cate_order':$('#cate_order').val(),  //分类排序
+              'cate_type':$('#cate_type').val(),  //分类类型
+              'cate_id': {$cate.cate_id}   //分类id          
+
+            },function(data){
+              //从服务器返回的信息处理
+              //1.更新成功
+            	if(data.status == 1) {
+            		layer.alert(data.msg, {icon: 6},function () {
+                	// 获得frame索引
+                	var index = parent.layer.getFrameIndex(window.name);
+                	//关闭当前frame
+                	parent.layer.close(index);
+            });
+                //更新失败的处理
+            	} else {
+            		layer.alert("更新失败", {icon: 6},function () {
+               		 // 获得frame索引
+                	var index = parent.layer.getFrameIndex(window.name);
+                	//关闭当前frame
+               		 parent.layer.close(index);
+            	});
+            }
+            	
+
+            })
+
+
+
+            
+            return false;
+          });
+          
+          
+        });
+    </script>
+    
+  </body>
+
+</html>

@@ -1,0 +1,182 @@
+{include file="common@header" /}
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">文档管理</a>
+        <a>
+          <cite>文档列表</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+     
+      <xblock>
+        <button class="layui-btn layui-btn-danger" onclick="delTrueAll()"><i class="layui-icon"></i>批量彻底删除</button>
+
+         <button class="layui-btn" onclick="resAll()"><i class="layui-icon">&#x1005;</i>批量恢复</button>
+        
+        <span class="x-right" style="line-height:40px">共有数据：{:getTrashNum('article')} 条</span>
+      </xblock>
+      <table class="layui-table">
+        <thead>
+          <tr>
+            <th>
+              <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th>ID</th>
+            <th>标题</th>
+            <th>所属分类</th>
+            <!-- <th>文档排序</th>
+            <th>是否推荐</th> -->
+            <th>发布时间</th>
+            <th>更新时间</th>
+            <th>删除时间</th>
+            <th >操作</th>
+            </tr>
+        </thead>
+        <tbody>
+
+         {volist name="arts" id="art"}
+
+          <tr>
+            <td>
+              <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{$art.art_id}'><i class="layui-icon">&#xe605;</i></div>
+            </td>
+
+           
+            <td>{$art.art_id}</td>
+            <td>{:mb_substr($art.art_title,0,25,'utf8')}</td>
+
+            {//为了直观,这里调用了自定义函数:根据分类id,自动获取对应的分类名称}
+            <td>{:getCateName($art.cate_id)}</td>
+           
+
+            <td>{$art.create_time}</td>
+            <td>{$art.update_time}</td>
+            <td><span style="color:coral">{$art.update_time}</span></td>
+            
+            <td class="td-manage">
+              <a title="删除" onclick="art_del(this,'{$art.art_id}')" href="javascript:;">
+                <i class="layui-icon">&#xe640;</i>
+              </a>
+              &nbsp;&nbsp;
+              <a title="恢复" onclick="art_res(this,'{$art.art_id}')" href="javascript:;">
+                <i class="layui-icon">&#x1005;</i>
+              </a>
+            </td>
+          </tr>
+          {/volist}
+        </tbody>
+      </table>
+      <div class="page">
+        <div>
+          {$arts|raw}
+          
+        </div>
+      </div>
+
+    </div>
+    <script>
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+
+      
+
+       /*单删除*/
+      function art_del(obj,id){
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $.get('{:url("delTrue")}',{
+                'art_id': id
+              }, function(data){
+                if (data.status==1) {
+                  $(obj).parents("tr").remove();
+                  layer.msg(data.msg,{icon:1,time:1000});
+                } else {
+                  layer.msg('删除失败!',{icon:1,time:1000});
+                }
+              })
+
+              
+          });
+      }
+
+      //批量真实删除
+       function delTrueAll (argument) {
+
+        var data = tableCheck.getData();
+        layer.confirm('确认要彻底删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            $.get('{:url("delTrueAll")}', {
+              //将js数组转为json发送给服务器
+              'id_list': JSON.stringify(data)
+            },function(res){
+              if(res.status==1) {
+               layer.msg(res.msg, {icon: 1});
+               $(".layui-form-checked").not('.header').parents('tr').remove();
+              }
+            })     
+        });
+      }
+
+
+       /*单条恢复*/
+      function art_res(obj,id){
+          layer.confirm('确认要恢复吗？',function(index){
+              //发异步删除数据
+              $.get('{:url("restore")}',{
+                'art_id': id
+              }, function(data){
+                if (data.status==1) {
+                  $(obj).parents("tr").remove();
+                  layer.msg(data.msg,{icon:1,time:1000});
+                } else {
+                  layer.msg('恢复失败!',{icon:1,time:1000});
+                }
+              })           
+          });
+      }
+
+
+      
+
+
+     //批量恢复
+       function resAll (argument) {
+
+        var data = tableCheck.getData();
+        layer.confirm('确认要恢复吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行恢复
+            $.get('{:url("resAll")}', {
+              //将js数组转为json发送给服务器
+              'id_list': JSON.stringify(data)
+            },function(res){
+              if(res.status==1) {
+               layer.msg(res.msg, {icon: 1});
+               $(".layui-form-checked").not('.header').parents('tr').remove();
+              }
+            })     
+        });
+      }
+
+
+
+    </script>
+   
+  </body>
+
+</html>
